@@ -51,9 +51,9 @@ export default function CellsPage() {
   }
 
   // Derived filter options
-  const hosts   = useMemo(() => [...new Set(rows.map(r => r.host_species).filter(Boolean))].sort(), [rows])
-  const statuses = useMemo(() => [...new Set(rows.map(r => r.status).filter(Boolean))].sort(), [rows])
-  const types   = useMemo(() => [...new Set(rows.map(r => r.cell_type).filter(Boolean))].sort(), [rows])
+  const hosts   = useMemo(() => Array.from(new Set(rows.map(r => r.host_species).filter(Boolean))).sort(), [rows])
+  const statuses = useMemo(() => Array.from(new Set(rows.map(r => r.status).filter(Boolean))).sort(), [rows])
+  const types   = useMemo(() => Array.from(new Set(rows.map(r => r.cell_type).filter(Boolean))).sort(), [rows])
 
   const filtered = useMemo(() => {
     let r = rows.filter(row => {
@@ -124,9 +124,9 @@ export default function CellsPage() {
 
   // All active tags
   const activeTags: { key: string; val: string }[] = [
-    ...[...selHost].map(v   => ({ key: 'host',   val: v })),
-    ...[...selStatus].map(v => ({ key: 'status', val: v })),
-    ...[...selType].map(v   => ({ key: 'type',   val: v })),
+    ...Array.from(selHost).map(v   => ({ key: 'host',   val: v })),
+    ...Array.from(selStatus).map(v => ({ key: 'status', val: v })),
+    ...Array.from(selType).map(v   => ({ key: 'type',   val: v })),
   ]
 
   return (
