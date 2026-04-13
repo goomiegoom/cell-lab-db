@@ -34,7 +34,7 @@ export async function GET(
     const cellImages = images.filter(img => conditionIds.has(img.condition_id))
 
     // Resolve Drive file IDs for each image (in parallel, cap to avoid rate limits)
-    const resolvedImages = await Promise.all(
+    const resolvedImages: (Record<string, string> & { fileId: string | null })[] = await Promise.all(
       cellImages.map(async img => {
         let fileId: string | null = null
         if (img.image_url) {
