@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Sidebar from '@/components/Sidebar'
 import CheckboxFilter from '@/components/CheckboxFilter'
 import { HostPill, StatusPill } from '@/components/Pill'
@@ -19,6 +20,7 @@ const CELL_FIELDS = [
 ]
 
 export default function CellsPage() {
+  const router = useRouter()
   const [rows, setRows] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -197,7 +199,7 @@ export default function CellsPage() {
                 {pageRows.length === 0 ? (
                   <tr><td colSpan={9} className="empty">No cells match your filters.</td></tr>
                 ) : pageRows.map(r => (
-                  <tr key={r._rowIndex}>
+                  <tr key={r._rowIndex} style={{ cursor: 'pointer' }} onClick={() => router.push(`/cells/${encodeURIComponent(r.cell_id)}`)}>
                     <td><strong>{r.cell_id}</strong></td>
                     <td><HostPill val={r.host_species}/></td>
                     <td>{r.tissue_origin}</td>
@@ -207,7 +209,7 @@ export default function CellsPage() {
                     <td>{r.source}</td>
                     <td style={{fontFamily:'var(--mono)',textAlign:'right'}}>{r._total_tubes ?? 0}</td>
                     <td>
-                      <div className="row-actions">
+                      <div className="row-actions" onClick={e => e.stopPropagation()}>
                         <button className="icon-btn" title="Edit" onClick={() => openEdit(r)}>
                           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" width="12" height="12"><path d="M11 2l3 3-8 8H3v-3l8-8z"/></svg>
                         </button>
