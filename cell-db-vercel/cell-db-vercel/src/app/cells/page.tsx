@@ -40,8 +40,11 @@ export default function CellsPage() {
     setLoading(true)
     try {
       const res = await fetch('/api/cells')
-      setRows(await res.json())
-    } catch { showToast('Failed to load', true) }
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error ?? `Server error ${res.status}`)
+      if (!Array.isArray(data)) throw new Error('Unexpected response from server')
+      setRows(data)
+    } catch (e: any) { showToast(e.message, true) }
     setLoading(false)
   }
 
